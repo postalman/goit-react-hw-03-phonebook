@@ -1,6 +1,6 @@
 import React from 'react';
 import { nanoid } from 'nanoid';
-import ContactForm from 'components/ContactsForm';
+import ContactForm from 'components/ContactForm';
 import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
 import { BodyDivCSS, DivCSS } from 'components/Styles.styles'
@@ -18,14 +18,16 @@ export class App extends React.Component {
 
   componentDidMount() {
     const storedContacts = localStorage.getItem('contacts');
-    storedContacts && this.setState({contacts : JSON.parse(storedContacts)});
+    if (!storedContacts) {
+      this.setState({ contacts: JSON.parse(storedContacts) });
+    }
   }
 
   componentDidUpdate(_, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
+    if (prevState.contacts.length !== this.state.contacts.length) {
       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
-  } 
+  }
 
   handleFilterChange = (e) => {
     this.setState({ filter: e.target.value });
